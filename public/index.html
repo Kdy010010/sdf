@@ -1,0 +1,38 @@
+<!-- public/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KS Search</title>
+</head>
+<body>
+    <h1>KS SEARCH</h1>
+    <input type="text" id="searchTerm" placeholder="검색어 입력">
+    <button onclick="search()">검색</button>
+    <div id="searchResults"></div>
+
+    <script>
+        async function search() {
+            const searchTerm = document.getElementById('searchTerm').value;
+            const response = await fetch(`/search?searchTerm=${encodeURIComponent(searchTerm)}`);
+            const data = await response.json();
+            const resultsContainer = document.getElementById('searchResults');
+            resultsContainer.innerHTML = '';
+
+            if (data.results.length === 0) {
+                resultsContainer.innerHTML = '검색 결과 없음';
+                return;
+            }
+
+            const resultList = document.createElement('ul');
+            data.results.forEach(result => {
+                const listItem = document.createElement('li');
+                listItem.textContent = result;
+                resultList.appendChild(listItem);
+            });
+            resultsContainer.appendChild(resultList);
+        }
+    </script>
+</body>
+</html>
